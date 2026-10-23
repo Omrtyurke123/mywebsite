@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Omar — Front-End Developer &amp; AI/ML Enthusiast</title>
+<style>
+  :root{
+    --bg: #FAFAF8;
+    --ink: #17181B;
+    --ink-soft: #55565B;
+    --ink-faint: #8B8C90;
+    --line: #E4E3DE;
+    --card: #ffffff;
+    --accent: #1F4FBF;
+    --chip-bg: #EFEEEA;
+    --max: 680px;
+    --gap-xs: 8px;
+    --gap-sm: 16px;
+    --gap-md: 28px;
+    --gap-lg: 56px;
+    --gap-xl: 96px;
+  }
+  html[data-theme="dark"]{
+    --bg: #121214;
+    --ink: #F1F1EE;
+    --ink-soft: #A7A7AC;
+    --ink-faint: #6E6E73;
+    --line: #2A2A2E;
+    --card: #1A1A1D;
+    --accent: #6C93E8;
+    --chip-bg: #212124;
+  }
+  *{ box-sizing: border-box; }
+  html{ -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background .25s ease, color .25s ease;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+  a{ color: inherit; text-decoration: none; }
+  img{ display:block; max-width:100%; }
+  button{ font-family: inherit; }
+
+  .shell{ max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 28px 0 0;
+  }
+  .nav .name{ font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .nav .nav-right{ display:flex; align-items:center; gap: 14px; }
+  .theme-btn, .menu-btn{
+    background:none; border:none; cursor:pointer;
+    font-size: 15px; color: var(--ink-soft); padding: 6px 0;
+  }
+  .theme-btn{ font-size: 17px; line-height:1; }
+  .theme-btn:hover, .menu-btn:hover{ color: var(--ink); }
+  .theme-btn:focus-visible, .menu-btn:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .overlay{
+    position: fixed; inset: 0; background: var(--bg);
+    display:flex; flex-direction:column;
+    padding: 24px; z-index: 50;
+    transform: translateY(-100%);
+    transition: transform .38s cubic-bezier(.65,0,.35,1);
+  }
+  .overlay.open{ transform: translateY(0); }
+  .overlay-top{ display:flex; align-items:center; justify-content: space-between; }
+  .overlay-close{ background:none; border:none; cursor:pointer; font-size:15px; color: var(--ink-soft); }
+  .overlay-close:hover{ color: var(--ink); }
+  .overlay-links{ margin-top: auto; margin-bottom: auto; display:flex; flex-direction:column; gap: 18px; }
+  .overlay-links a{ font-size: 34px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+  .overlay-links a:hover{ color: var(--ink-soft); }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding: 64px 0 0; }
+  .eyebrow{ font-size: 13px; color: var(--ink-faint); margin: 0 0 14px; }
+  .hero h1{
+    font-size: 32px; line-height: 1.28; font-weight: 600;
+    letter-spacing: -0.015em; margin: 0 0 20px; max-width: 580px;
+  }
+  .hero p{ font-size: 16px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 14px; max-width: 560px; }
+  .hero-meta{ display:flex; flex-wrap:wrap; gap: 8px 22px; margin-top: 20px; font-size: 13.5px; color: var(--ink-faint); }
+  .hero-meta span b{ color: var(--ink-soft); font-weight: 500; }
+  .hero-cta{ display:flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    height: 42px; padding: 0 20px; border-radius: 6px; font-size: 14px; font-weight: 500;
+    transition: opacity .15s ease, background .15s ease, color .15s ease;
+  }
+  .btn-primary{ background: var(--ink); color: var(--bg); }
+  .btn-primary:hover{ opacity: .85; }
+  .btn-secondary{ border: 1px solid var(--line); color: var(--ink); }
+  .btn-secondary:hover{ border-color: var(--ink-soft); }
+
+  /* ---------- SECTION HEADS ---------- */
+  section.block{ margin-top: var(--gap-xl); }
+  .block > h2{ font-size: 13px; font-weight: 600; color: var(--ink-soft); margin: 0 0 var(--gap-md); letter-spacing: 0.01em; }
+  .block > .lead{ font-size: 14.5px; color: var(--ink-soft); max-width: 540px; margin: -14px 0 28px; line-height: 1.7; }
+
+  /* ---------- WHAT I DO ---------- */
+  .do-grid{ display:flex; flex-direction:column; }
+  .do-item{ display:flex; gap: 18px; padding: 20px 0; border-top: 1px solid var(--line); }
+  .do-item:last-child{ border-bottom: 1px solid var(--line); }
+  .do-num{ font-size: 13px; color: var(--ink-faint); flex-shrink:0; width: 26px; padding-top: 2px; }
+  .do-body h3{ font-size: 15.5px; font-weight: 600; margin: 0 0 6px; }
+  .do-body p{ font-size: 14.5px; color: var(--ink-soft); margin:0; line-height:1.65; max-width: 480px; }
+
+  /* ---------- SKILLS ---------- */
+  .skill-group{ margin-bottom: 26px; }
+  .skill-group h3{ font-size: 13px; color: var(--ink-faint); font-weight: 600; margin: 0 0 10px; }
+  .chips{ display:flex; flex-wrap: wrap; gap: 8px; }
+  .chip{ font-size: 13px; padding: 6px 12px; border-radius: 20px; background: var(--chip-bg); color: var(--ink-soft); }
+
+  /* ---------- PROJECTS ---------- */
+  .project-item{ padding: 26px 0; border-top: 1px solid var(--line); }
+  .project-item:last-child{ border-bottom: 1px solid var(--line); }
+  .project-cover{
+    width:100%; aspect-ratio: 16/9; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--chip-bg); margin-bottom: 16px;
+    display:flex; align-items:center; justify-content:center; overflow:hidden; position: relative;
+  }
+  .project-cover .mono{ font-size: 34px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); opacity:.9; }
+  .project-cover::after{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(var(--ink-faint) 1px, transparent 1px);
+    background-size: 14px 14px; opacity: .12;
+  }
+  .project-cover.large{ aspect-ratio: 16/8; }
+  .project-cover.large .mono{ font-size: 46px; }
+  .project-item .row{ display:flex; align-items:baseline; justify-content: space-between; gap:12px; flex-wrap: wrap; }
+  .project-item h3{ font-size: 16px; font-weight: 600; margin:0; }
+  .project-cat{ font-size: 12.5px; color: var(--ink-faint); white-space: nowrap; }
+  .project-item p{ font-size: 14.5px; color: var(--ink-soft); margin: 8px 0 10px; max-width: 540px; line-height: 1.65; }
+  .project-tech{ display:flex; flex-wrap:wrap; gap: 6px; margin-bottom: 10px; }
+  .project-tech span{ font-size: 12px; color: var(--ink-faint); background: var(--chip-bg); padding: 3px 9px; border-radius: 20px; }
+  .project-item ul{ margin: 0 0 10px; padding-left: 18px; color: var(--ink-soft); font-size: 13.5px; line-height: 1.8; }
+  .project-item a.plink{ font-size: 13.5px; color: var(--ink); border-bottom: 1px solid var(--ink-faint); }
+  .project-item a.plink:hover{ color: var(--accent); border-color: var(--accent); }
+  .project-actions{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+  .project-actions .btn{ height: 38px; padding: 0 16px; font-size: 13.5px; }
+
+  /* ---------- EXPERIENCE / TRAINING ---------- */
+  .exp-item{ padding: 20px 0; border-top: 1px solid var(--line); }
+  .exp-item:last-child{ border-bottom: 1px solid var(--line); }
+  .exp-item h3{ font-size: 15px; font-weight: 600; margin: 0 0 6px; }
+  .exp-item p{ font-size: 14.5px; color: var(--ink-soft); margin: 0 0 8px; line-height: 1.65; max-width: 540px; }
+  .exp-focus{ display:flex; flex-wrap:wrap; gap: 6px; }
+  .exp-focus span{ font-size: 12px; color: var(--ink-faint); background: var(--chip-bg); padding: 3px 9px; border-radius: 20px; }
+
+  /* ---------- POSTS / TIMELINE ---------- */
+  .post{ padding: 22px 0; border-top: 1px solid var(--line); display:flex; flex-direction:column; gap:6px; }
+  .post:last-child{ border-bottom: 1px solid var(--line); }
+  .post .row{ display:flex; align-items:baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .post h3{ font-size: 16px; font-weight: 600; margin:0; letter-spacing: -0.005em; line-height: 1.4; }
+  .post .cat{ font-size: 12.5px; color: var(--ink-faint); white-space: nowrap; }
+  .post p{ margin: 2px 0 4px; color: var(--ink-soft); font-size: 14.5px; line-height:1.65; max-width: 540px; }
+  .post .tags{ display:flex; flex-wrap:wrap; gap:6px; margin: 4px 0 6px; }
+  .post .tags span{ font-size: 11.5px; color: var(--ink-faint); background: var(--chip-bg); padding: 3px 9px; border-radius: 20px; }
+  .post .watch{ font-size: 13.5px; color: var(--ink); font-weight: 500; }
+  .post .watch::after{ content: " ›"; }
+  .post-link{ display:block; }
+  .post-link:hover h3{ color: var(--accent); }
+  .post-link:hover .watch{ color: var(--accent); }
+
+  /* ---------- CURRENTLY / GOALS ---------- */
+  .split{ display:grid; grid-template-columns: 1fr 1fr; gap: var(--gap-lg); }
+  .split h2{ font-size: 13px; font-weight:600; color: var(--ink-soft); margin: 0 0 14px; }
+  .split p{ font-size: 14.5px; color: var(--ink-soft); line-height: 1.7; margin: 0 0 12px; }
+  .split ul{ margin:0; padding-left: 18px; font-size: 14.5px; color: var(--ink-soft); line-height: 1.9; }
+  @media (max-width: 620px){ .split{ grid-template-columns: 1fr; gap: var(--gap-md); } }
+
+  /* ---------- CONTACT ---------- */
+  .contact h2{ font-size: 22px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .contact > p{ color: var(--ink-soft); font-size: 15px; max-width: 480px; margin: 0 0 24px; line-height: 1.7; }
+  .contact-cta{ display:flex; gap: 12px; flex-wrap: wrap; }
+
+  /* ---------- BOTTOM NAV / FOOTER ---------- */
+  .bottom-nav{ margin-top: var(--gap-xl); display:flex; gap: 20px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; }
+  .bottom-nav a{ color: var(--ink-soft); }
+  .bottom-nav a:hover{ color: var(--ink); }
+  footer.sitefooter{ padding: 28px 0 64px; }
+  footer.sitefooter .foot-top{ display:flex; justify-content: space-between; align-items:flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
+  footer.sitefooter .foot-name{ font-size: 14px; font-weight: 600; }
+  footer.sitefooter .foot-role{ font-size: 12.5px; color: var(--ink-faint); margin-top: 2px; }
+  footer.sitefooter .foot-links{ display:flex; gap: 16px; font-size: 13px; }
+  footer.sitefooter .foot-links a{ color: var(--ink-soft); }
+  footer.sitefooter .foot-links a:hover{ color: var(--ink); }
+  footer.sitefooter .foot-tagline{ font-size: 13px; color: var(--ink-soft); margin: 0 0 10px; }
+  footer.sitefooter .copyright{ font-size: 12.5px; color: var(--ink-faint); }
+
+  /* ---------- inner pages ---------- */
+  .page-title{ font-size: 26px; font-weight: 600; letter-spacing: -0.015em; margin: 56px 0 8px; }
+  .page-sub{ font-size: 14.5px; color: var(--ink-soft); max-width: 540px; margin: 0 0 32px; line-height:1.7; }
+  .prose p{ color: var(--ink-soft); font-size: 15.5px; line-height: 1.75; max-width: 560px; margin: 0 0 16px; }
+  .back-link{ display:inline-block; margin: 24px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+  .back-link:hover{ color: var(--ink); }
+  .back-link::before{ content: "← "; }
+
+  .uses-group{ margin-bottom: 28px; }
+  .uses-group h3{ font-size: 13px; color: var(--ink-faint); font-weight: 600; margin: 0 0 10px; }
+  .uses-group .chips{ margin-bottom: 4px; }
+
+  .article-meta{ font-size: 13px; color: var(--ink-faint); margin: 8px 0 32px; display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <nav class="nav">
+    <a class="name" href="#/">Omar</a>
+    <div class="nav-right">
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button>
+      <button class="menu-btn" id="menuBtn" aria-haspopup="true" aria-expanded="false">Menu</button>
+    </div>
+  </nav>
+
+  <main id="app"></main>
+</div>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="overlay-top">
+    <span class="name">Omar</span>
+    <button class="overlay-close" id="closeBtn">Close</button>
+  </div>
+  <div class="overlay-links">
+    <a href="#/about" class="ov-link">About</a>
+    <a href="#/posts" class="ov-link">Posts</a>
+    <a href="#/projects" class="ov-link">Projects</a>
+    <a href="#/uses" class="ov-link">Uses</a>
+  </div>
+</div>
+
+<script>
+/* ================= DATA ================= */
+const WHAT_I_DO = [
+  { n:"01", t:"Front-End Development", d:"I build modern, responsive, and interactive websites and web applications with a strong focus on clean UI, usability, and performance." },
+  { n:"02", t:"AI & Machine Learning", d:"I'm studying and experimenting with Artificial Intelligence and Machine Learning, focusing on practical applications rather than theory alone." },
+  { n:"03", t:"NLP", d:"I have worked on Natural Language Processing projects and explored how language models can be used to analyze and understand text." },
+  { n:"04", t:"RAG Systems", d:"I'm interested in Retrieval-Augmented Generation and building AI assistants that combine language models with external knowledge." },
+  { n:"05", t:"Problem Solving", d:"I practice algorithms and competitive programming and have solved programming problems through platforms such as Codeforces." },
+  { n:"06", t:"Teaching", d:"I enjoy explaining technical concepts and helping others learn. I have taught a complete Front-End development season." }
+];
+
+const SKILLS = [
+  { g:"Frontend", items:["HTML5","CSS3","JavaScript","TypeScript","React","Next.js","Tailwind CSS","Responsive Web Design","DOM Manipulation"] },
+  { g:"Programming", items:["Python","JavaScript","Data Structures","Algorithms","Problem Solving","Object-Oriented Programming"] },
+  { g:"AI / Machine Learning", items:["Machine Learning","Natural Language Processing","Neural Networks","RAG","AI Assistants","OCR","LLM Applications","AI Evaluation"] },
+  { g:"Backend / Data", items:["Node.js","PHP","SQL","PostgreSQL","REST APIs","Supabase"] },
+  { g:"Tools & Platforms", items:["Git","GitHub","Docker","Figma","Cursor","VS Code","Netlify"] },
+  { g:"Other", items:["UI/UX","SEO","Responsive Design","Technical Teaching","Project Development","Hackathon Collaboration"] }
+];
+
+const PROJECTS = [
+  {
+    slug:"ortho-assist", name:"Ortho Assist — AI Medical Assistant", cat:"AI / RAG / NLP", initials:"OA",
+    desc:"An AI-powered orthopedic medical assistant designed to provide useful and structured information around orthopedic topics. The project combines Retrieval-Augmented Generation with a knowledge base to improve the reliability and relevance of generated answers. The system was developed as part of an AI/ML hackathon training experience and includes work across the AI, RAG, backend, safety, evaluation, and frontend layers.",
+    tech:["Python","RAG","NLP","LLMs","AI Evaluation","Backend APIs","Frontend"],
+    highlights:["Retrieval-Augmented Generation","Knowledge retrieval","AI assistant","Safety considerations","Evaluation","Arabic and English support","Full-stack integration"],
+    link:"https://github.com/mohamed71tito-beep/ortho-assist-rag.git", linkLabel:"View GitHub"
+  },
+  {
+    slug:"movie-rating-analysis", name:"Movie Rating Analysis", cat:"NLP / Machine Learning", initials:"MR",
+    desc:"An NLP project focused on analyzing movie reviews and predicting or evaluating sentiment from textual data. The project explores how Natural Language Processing techniques can transform unstructured text into useful insights.",
+    tech:["Python","NLP","Machine Learning","Text Processing","Data Analysis"],
+    highlights:["Text preprocessing","Sentiment analysis","NLP pipeline","Machine Learning","Data analysis"]
+  },
+  {
+    slug:"medicine-recognition-assistant", name:"Medicine Recognition Assistant", cat:"AI / OCR / Computer Vision", initials:"MA",
+    desc:"An AI application concept designed to recognize medicines from images and provide useful information about them. The project explores offline OCR using PaddleOCR and integration with a large medicine database. The goal is to create a practical assistant capable of recognizing medicine packaging and connecting the extracted information with structured medicine data.",
+    tech:["Python","PaddleOCR","OCR","AI","Computer Vision","Database Systems"],
+    highlights:["Offline OCR","Image text extraction","Medicine recognition","Large-scale database integration","AI-assisted information retrieval"]
+  },
+  {
+    slug:"azkar-app", name:"Azkar App", cat:"Flutter / Mobile Development", initials:"AZ",
+    desc:"A Flutter mobile application concept focused on Azkar and daily remembrance. The project explores mobile application development combined with productivity-focused functionality, including an app-blocking concept to help users maintain focus.",
+    tech:["Flutter","Dart","Mobile Development"],
+    highlights:["Cross-platform mobile development","Clean mobile UI","Daily Azkar","Productivity features"]
+  },
+  {
+    slug:"property-marketplace-ai", name:"Property Marketplace with AI", cat:"AI / Marketplace / Web Development", initials:"PM",
+    desc:"A marketplace concept designed to connect property owners with people looking for properties. The platform explores the use of Artificial Intelligence to improve the property search experience and provide intelligent price prediction. Core idea: connect property owners and property seekers through a simple digital platform while using AI to provide additional insights.",
+    tech:["AI","Web Development","Marketplace"],
+    highlights:["Property listings","Property search","Owner profiles","Property seeker profiles","AI price prediction","Search filters","Property recommendations"]
+  },
+  {
+    slug:"union-of-owners-rfq", name:"Union of Owners — RFQ Platform", cat:"Marketplace / Product Development", initials:"UO",
+    desc:"A platform concept designed around connecting property owners with service providers through a structured Request for Quotation workflow. The idea focuses on simplifying the process of requesting services, receiving offers, comparing options, and selecting the appropriate provider.",
+    tech:["Product Development","Marketplace"],
+    highlights:["Create service requests","Receive quotations","Compare offers","Connect owners with workers","Manage requests"]
+  }
+];
+
+const EXPERIENCE = [
+  { t:"Front-End Development", d:"I have focused extensively on Front-End Development and modern web technologies, building responsive interfaces and web applications. I care about clean UI, reusable components, responsive behavior, and creating experiences that are easy to use." },
+  { t:"Technical Teaching", d:"I taught a complete Front-End development season, covering fundamental and practical web development concepts and helping students build their understanding through hands-on learning." },
+  { t:"Competitive Programming", d:"I have practiced competitive programming and problem solving through ECPC training and platforms such as Codeforces. This experience helped me strengthen my understanding of algorithms, data structures, logical thinking, and efficient problem solving." },
+  { t:"AI / ML Development", d:"I have been expanding my technical focus toward Artificial Intelligence and Machine Learning through practical projects in NLP, RAG, OCR, and AI-powered applications." }
+];
+
+const TRAINING = [
+  { t:"Orange Egypt — AI/ML & Hackathon Training", d:"Participated in AI/ML and hackathon training activities with Orange Egypt, working on practical challenges and exploring how Artificial Intelligence can be applied to real-world problems. During this experience, I worked with a team on an AI-powered orthopedic assistant using Retrieval-Augmented Generation.", focus:["AI","Machine Learning","RAG","NLP","Teamwork","Problem Solving","Hackathon Development"] },
+  { t:"Decode Labs — AI/ML Training", d:"Participated in Decode Labs AI/ML training, developing knowledge and practical experience across Artificial Intelligence and Machine Learning concepts. The training included workshops, webinars, technical learning, experimentation, and project-oriented activities.", focus:["Artificial Intelligence","Machine Learning","NLP","RAG","AI Applications","Technical Workshops"] },
+  { t:"ECPC Training", d:"Participated in ECPC-related competitive programming training and dedicated significant time to algorithmic problem solving. I practiced programming problems and strengthened my ability to analyze problems, design algorithms, and implement efficient solutions.", focus:["Algorithms","Data Structures","Competitive Programming","Problem Solving","Codeforces"] },
+  { t:"AI Hackathon Experience", d:"Worked as part of a team during AI/ML hackathon training to develop an orthopedic AI assistant. The project involved combining AI, RAG, backend development, safety considerations, evaluation, and frontend development into one working system.", focus:[] }
+];
+
+const POSTS = [
+  { slug:"ai-orthopedic-assistant-rag", title:"Building an AI Orthopedic Assistant with RAG", cat:"Hackathon / AI / RAG", desc:"A look at our experience building an AI-powered orthopedic assistant during AI/ML hackathon training, from the initial idea to RAG, backend integration, safety considerations, evaluation, and frontend development.", tags:["AI","RAG","NLP","Hackathon","Machine Learning"] },
+  { slug:"journey-into-ai-ml", title:"My Journey into AI & Machine Learning", cat:"Learning", desc:"Why I started expanding my development journey from Front-End Development into Artificial Intelligence and Machine Learning, and what I've learned from building practical projects along the way.", tags:["AI","Machine Learning","Learning"] },
+  { slug:"decode-labs-training", title:"What I Learned from Decode Labs AI/ML Training", cat:"Training", desc:"A reflection on my experience during Decode Labs AI/ML training, including the workshops, technical sessions, practical learning, and the experience of turning AI concepts into real projects.", tags:["Decode Labs","AI","Machine Learning","Training"] },
+  { slug:"orange-egypt-training", title:"My Experience with Orange Egypt AI/ML Training", cat:"Training", desc:"An overview of my experience participating in Orange Egypt AI/ML and hackathon training, working with a team, exploring AI technologies, and developing a practical AI solution.", tags:["Orange Egypt","AI","Machine Learning","Hackathon"] },
+  { slug:"algorithms-to-real-projects", title:"From Algorithms to Real Projects", cat:"Problem Solving", desc:"How practicing competitive programming and solving problems helped me develop a stronger approach to breaking down complex problems and turning ideas into working solutions.", tags:["ECPC","Codeforces","Algorithms","Problem Solving"] },
+  { slug:"teaching-first-frontend-season", title:"Teaching My First Complete Front-End Season", cat:"Teaching", desc:"A reflection on teaching a complete Front-End development season, explaining technical concepts, helping students build projects, and learning from the experience of teaching others.", tags:["Frontend","Teaching","JavaScript","Web Development"] },
+  { slug:"learning-rag", title:"Learning RAG: From Theory to Application", cat:"AI / RAG", desc:"An introduction to what I learned about Retrieval-Augmented Generation and how it can be used to build AI systems that retrieve relevant information before generating an answer.", tags:["RAG","LLM","AI","NLP"] },
+  { slug:"nlp-movie-reviews", title:"Exploring NLP Through Movie Reviews", cat:"NLP", desc:"My experience building an NLP project around movie reviews and exploring how text can be processed, analyzed, and transformed into useful predictions and insights.", tags:["NLP","Python","Machine Learning"] },
+  { slug:"ocr-and-ai", title:"Building with OCR and AI", cat:"AI / OCR", desc:"Exploring how OCR can be combined with AI to recognize information from images, including the idea of an offline medicine recognition assistant using PaddleOCR.", tags:["OCR","PaddleOCR","AI","Computer Vision"] },
+  { slug:"why-real-world-projects", title:"Why I Like Building Real-World Projects", cat:"Personal / Development", desc:"A personal look at why I prefer learning through building, experimenting, failing, improving, and turning technical ideas into products that could solve real problems.", tags:["Development","AI","Projects","Learning"] }
+];
+
+const USES = [
+  { g:"Development", items:["VS Code","Cursor","GitHub","Git","Chrome","Terminal"] },
+  { g:"Frontend", items:["React","Next.js","Tailwind CSS","JavaScript","TypeScript"] },
+  { g:"AI / ML", items:["Python","Jupyter","Pandas","NLP tools","RAG tools","OCR tools"] },
+  { g:"Design", items:["Figma"] },
+  { g:"Backend", items:["Node.js","PHP","PostgreSQL","Supabase"] },
+  { g:"Deployment", items:["Netlify","GitHub"] }
+];
+
+const GITHUB_URL = "https://github.com/mohamed71tito-beep/ortho-assist-rag.git";
+
+/* ================= helpers ================= */
+const $app = document.getElementById('app');
+
+function whatIDoHTML(){
+  return `
+    <section class="block">
+      <h2>What I do</h2>
+      <div class="do-grid">
+        ${WHAT_I_DO.map(x => `
+          <div class="do-item">
+            <div class="do-num">${x.n}</div>
+            <div class="do-body"><h3>${x.t}</h3><p>${x.d}</p></div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  `;
+}
+function skillsHTML(){
+  return `
+    <section class="block">
+      <h2>Skills &amp; Technologies</h2>
+      ${SKILLS.map(s => `
+        <div class="skill-group">
+          <h3>${s.g}</h3>
+          <div class="chips">${s.items.map(i => `<span class="chip">${i}</span>`).join('')}</div>
+        </div>
+      `).join('')}
+    </section>
+  `;
+}
+function projectCardHTML(p){
+  return `
+    <div class="project-item">
+      <div class="project-cover"><span class="mono">${p.initials}</span></div>
+      <div class="row"><h3>${p.name}</h3><span class="project-cat">${p.cat}</span></div>
+      <p>${p.desc.length > 190 ? p.desc.slice(0,190).trim() + '…' : p.desc}</p>
+      <div class="project-tech">${p.tech.map(t => `<span>${t}</span>`).join('')}</div>
+      <div class="project-actions">
+        <a class="btn btn-secondary" href="#/projects/${p.slug}">View more</a>
+        ${p.link ? `<a class="btn btn-secondary" href="${p.link}" target="_blank" rel="noopener">View GitHub</a>` : ''}
+      </div>
+    </div>
+  `;
+}
+function projectDetailHTML(p){
+  return `
+    <h1 class="page-title">${p.name}</h1>
+    <p class="page-sub">${p.cat}</p>
+    <div class="project-cover large"><span class="mono">${p.initials}</span></div>
+    <div class="prose"><p>${p.desc}</p></div>
+    <div class="project-tech" style="margin-bottom:20px;">${p.tech.map(t => `<span>${t}</span>`).join('')}</div>
+    ${p.highlights?.length ? `<ul style="color:var(--ink-soft); font-size:14.5px; line-height:1.9; padding-left:18px; margin:0 0 24px;">${p.highlights.map(h => `<li>${h}</li>`).join('')}</ul>` : ''}
+    <div class="project-actions">
+      ${p.link ? `<a class="btn btn-primary" href="${p.link}" target="_blank" rel="noopener">View GitHub</a>` : ''}
+      <a class="btn btn-secondary" href="#/projects">All projects</a>
+    </div>
+  `;
+}
+function experienceHTML(){
+  return `
+    <section class="block">
+      <h2>Experience &amp; Activities</h2>
+      ${EXPERIENCE.map(e => `
+        <div class="exp-item"><h3>${e.t}</h3><p>${e.d}</p></div>
+      `).join('')}
+    </section>
+  `;
+}
+function trainingHTML(){
+  return `
+    <section class="block">
+      <h2>Training &amp; Hackathons</h2>
+      ${TRAINING.map(t => `
+        <div class="exp-item">
+          <h3>${t.t}</h3>
+          <p>${t.d}</p>
+          ${t.focus.length ? `<div class="exp-focus">${t.focus.map(f => `<span>${f}</span>`).join('')}</div>` : ''}
+        </div>
+      `).join('')}
+    </section>
+  `;
+}
+function postCardHTML(p){
+  return `
+    <a class="post-link" href="#/posts/${p.slug}">
+      <div class="post">
+        <div class="row"><h3>${p.title}</h3><span class="cat">${p.cat}</span></div>
+        <p>${p.desc}</p>
+        <div class="tags">${p.tags.map(t => `<span>${t}</span>`).join('')}</div>
+        <span class="watch">Read more</span>
+      </div>
+    </a>
+  `;
+}
+
+/* ================= pages ================= */
+function renderHome(){
+  return `
+    <section class="hero">
+      <div class="eyebrow">Egypt</div>
+      <h1>Front-End Developer building modern digital experiences and exploring AI.</h1>
+      <p>I'm a Front-End Developer focused on creating clean, responsive, and interactive web experiences. I'm also studying AI and Machine Learning, building practical projects with NLP, RAG, and intelligent applications.</p>
+      <p>I enjoy solving problems, experimenting with new technologies, participating in technical training and hackathons, and turning ideas into useful products.</p>
+      <div class="hero-meta">
+        <span><b>Current focus —</b> Front-End Development, Artificial Intelligence, Machine Learning, NLP, RAG, and Product Development.</span>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#/projects">View My Work</a>
+        <a class="btn btn-secondary" href="#/about">About Me</a>
+      </div>
+    </section>
+
+    ${whatIDoHTML()}
+    ${skillsHTML()}
+
+    <section class="block">
+      <h2>Selected Projects</h2>
+      <div class="lead">I like building projects that sit at the intersection of technology and real-world problems. Some of my work focuses on Front-End Development, while other projects explore AI, NLP, RAG, OCR, mobile development, and digital marketplaces.</div>
+      ${PROJECTS.slice(0,3).map(p => projectCardHTML(p)).join('')}
+      <a class="back-link" href="#/projects" style="margin-top:20px;">See all projects</a>
+    </section>
+
+    <section class="block">
+      <h2>Recent Posts</h2>
+      ${POSTS.slice(0,3).map(postCardHTML).join('')}
+      <a class="back-link" href="#/posts" style="margin-top:20px;">View the full timeline</a>
+    </section>
+
+    <section class="block split">
+      <div>
+        <h2>Currently</h2>
+        <p>Currently focused on becoming a stronger software developer while expanding my knowledge in Artificial Intelligence and Machine Learning. I'm particularly interested in:</p>
+        <ul>
+          <li>AI-powered applications</li>
+          <li>RAG systems</li>
+          <li>NLP</li>
+          <li>LLM applications</li>
+          <li>Modern Front-End development</li>
+          <li>Problem solving</li>
+          <li>Product development</li>
+        </ul>
+      </div>
+      <div>
+        <h2>What I'm working toward</h2>
+        <p>My goal is to become a strong software engineer capable of combining modern software development with Artificial Intelligence to build useful products that solve real problems.</p>
+        <p>I'm continuously improving my programming fundamentals, exploring AI technologies, building projects, participating in technical training, and learning from every project I work on.</p>
+      </div>
+    </section>
+
+    <section class="block contact">
+      <h2>Let's build something</h2>
+      <p>Have an idea, a project, or an interesting problem to solve? I'm always interested in connecting with people who enjoy technology, learning, and building useful products.</p>
+      <div class="contact-cta">
+        <a class="btn btn-primary" href="mailto:your-email@example.com">Get in touch</a>
+        <a class="btn btn-secondary" href="${GITHUB_URL}" target="_blank" rel="noopener">View GitHub</a>
+      </div>
+    </section>
+
+    <nav class="bottom-nav">
+      <a href="#/about">About</a>
+      <a href="#/posts">Posts</a>
+      <a href="#/projects">Projects</a>
+      <a href="#/uses">Uses</a>
+    </nav>
+    ${footerHTML()}
+  `;
+}
+
+function renderAbout(){
+  return `
+    <h1 class="page-title">About</h1>
+    <p class="page-sub">Front-End Developer &amp; AI/ML Enthusiast, based in Egypt.</p>
+    <div class="prose">
+      <p>I'm a developer who started with a strong interest in programming and web development and gradually expanded my focus toward Artificial Intelligence and Machine Learning.</p>
+      <p>My main strength is Front-End Development, where I build modern responsive interfaces using technologies such as HTML, CSS, JavaScript, React, Next.js, and Tailwind CSS.</p>
+      <p>At the same time, I'm continuously developing my AI/ML skills through hands-on projects, technical training, hackathons, and experimentation.</p>
+      <p>I'm particularly interested in NLP, Retrieval-Augmented Generation, AI assistants, and building products that solve real-world problems.</p>
+      <p>I also enjoy competitive programming and problem solving. I've trained through ECPC-related practice and spent significant time solving programming problems on Codeforces.</p>
+      <p>Beyond coding, I enjoy teaching and sharing knowledge. I have also taught a complete Front-End season, helping students understand web development concepts and build their own projects.</p>
+      <p>I believe the best way to learn technology is to build with it.</p>
+    </div>
+    ${experienceHTML()}
+    ${trainingHTML()}
+    <a class="back-link" href="#/">Back home</a>
+  `;
+}
+
+function renderPosts(){
+  return `
+    <h1 class="page-title">Posts</h1>
+    <p class="page-sub">A timeline documenting training, hackathons, workshops, and the projects and milestones along the way — not a typical blog.</p>
+    ${POSTS.map(postCardHTML).join('')}
+    <a class="back-link" href="#/">Back home</a>
+  `;
+}
+
+function renderPost(slug){
+  const p = POSTS.find(x => x.slug === slug);
+  if(!p) return `<h1 class="page-title">Post not found</h1><a class="back-link" href="#/posts">All posts</a>`;
+  return `
+    <h1 class="page-title">${p.title}</h1>
+    <div class="article-meta"><span>${p.cat}</span></div>
+    <div class="tags" style="margin-bottom:24px;">${p.tags.map(t => `<span>${t}</span>`).join('')}</div>
+    <div class="prose"><p>${p.desc}</p></div>
+    <a class="back-link" href="#/posts">All posts</a>
+  `;
+}
+
+function renderProjects(){
+  return `
+    <h1 class="page-title">Selected Projects</h1>
+    <p class="page-sub">I like building projects that sit at the intersection of technology and real-world problems. Some of my work focuses on Front-End Development, while other projects explore AI, NLP, RAG, OCR, mobile development, and digital marketplaces. These represent what I'm learning, experimenting with, and building.</p>
+    ${PROJECTS.map(p => projectCardHTML(p)).join('')}
+    <a class="back-link" href="#/">Back home</a>
+  `;
+}
+
+function renderProjectDetail(slug){
+  const p = PROJECTS.find(x => x.slug === slug);
+  if(!p) return `<h1 class="page-title">Project not found</h1><a class="back-link" href="#/projects">All projects</a>`;
+  return `
+    ${projectDetailHTML(p)}
+    <a class="back-link" href="#/projects">All projects</a>
+  `;
+}
+
+function renderUses(){
+  return `
+    <h1 class="page-title">Things I use</h1>
+    <p class="page-sub">A collection of the tools and technologies I use while learning, developing projects, practicing problem solving, and experimenting with AI.</p>
+    ${USES.map(g => `
+      <div class="uses-group">
+        <h3>${g.g}</h3>
+        <div class="chips">${g.items.map(i => `<span class="chip">${i}</span>`).join('')}</div>
+      </div>
+    `).join('')}
+    <a class="back-link" href="#/">Back home</a>
+  `;
+}
+
+function footerHTML(){
+  return `
+    <footer class="sitefooter">
+      <div class="foot-top">
+        <div>
+          <div class="foot-name">Omar</div>
+          <div class="foot-role">Front-End Developer &amp; AI/ML Enthusiast</div>
+        </div>
+        <div class="foot-links">
+          <a href="#/about">About</a>
+          <a href="#/posts">Posts</a>
+          <a href="#/projects">Projects</a>
+          <a href="#/uses">Uses</a>
+          <a href="${GITHUB_URL}" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <p class="foot-tagline">Building, learning, and sharing along the way.</p>
+      <div class="copyright">© 2026 Omar. All rights reserved.</div>
+    </footer>
+  `;
+}
+
+/* ================= router ================= */
+function route(){
+  const hash = location.hash.replace(/^#/, '') || '/';
+  const parts = hash.split('/').filter(Boolean);
+  let html;
+  if(parts.length === 0) html = renderHome();
+  else if(parts[0] === 'about') html = renderAbout();
+  else if(parts[0] === 'posts' && parts.length === 1) html = renderPosts();
+  else if(parts[0] === 'posts' && parts.length === 2) html = renderPost(parts[1]);
+  else if(parts[0] === 'projects' && parts.length === 1) html = renderProjects();
+  else if(parts[0] === 'projects' && parts.length === 2) html = renderProjectDetail(parts[1]);
+  else if(parts[0] === 'uses') html = renderUses();
+  else html = renderHome();
+
+  $app.innerHTML = html;
+  window.scrollTo(0,0);
+  closeOverlay();
+}
+
+/* ================= mobile overlay ================= */
+const overlay = document.getElementById('overlay');
+const menuBtn = document.getElementById('menuBtn');
+const closeBtn = document.getElementById('closeBtn');
+function openOverlay(){
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+  menuBtn.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+}
+function closeOverlay(){
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden','true');
+  menuBtn.setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+}
+menuBtn.addEventListener('click', openOverlay);
+closeBtn.addEventListener('click', closeOverlay);
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeOverlay(); });
+overlay.querySelectorAll('.ov-link').forEach(a => a.addEventListener('click', closeOverlay));
+
+/* ================= theme toggle (in-memory only) ================= */
+const root = document.documentElement;
+const themeBtn = document.getElementById('themeBtn');
+let isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+function applyTheme(){
+  root.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  themeBtn.textContent = isDark ? '☀' : '☾';
+}
+themeBtn.addEventListener('click', () => { isDark = !isDark; applyTheme(); });
+applyTheme();
+
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
